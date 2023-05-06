@@ -1,11 +1,11 @@
+import { env } from './config/env';
 import { Server } from './server';
 
 export class LatinStationApp {
   server: Server;
 
   constructor() {
-    const port = Number(process.env.PORT) ?? 3000;
-    this.server = new Server(port);
+    this.server = new Server(env.PORT);
   }
 
   async start(): Promise<void> {

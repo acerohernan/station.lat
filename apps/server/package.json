@@ -11,7 +11,8 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "helmet": "^6.1.5",
-    "ts-node-dev": "^2.0.0"
+    "ts-node-dev": "^2.0.0",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.3",
@@ -20,7 +21,7 @@
     "@types/node": "^20.1.0"
   },
   "scripts": {
-    "dev": "ts-node-dev --transpile-only --respawn src/start.ts",
+    "dev": "NODE_ENV=development ts-node-dev --transpile-only --respawn src/start.ts",
     "build": "yarn build:clean && tsc",
     "build:clean": "rm -rf dist",
     "lint": "eslint src --fix",
