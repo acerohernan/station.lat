@@ -4,6 +4,8 @@ import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { registerRoutes } from './routes';
+import { configurePassport } from './config/passport';
+import passport from 'passport';
 
 export class Server {
   httpServer?: http.Server;
@@ -26,6 +28,9 @@ export class Server {
         origin: '*',
       })
     );
+
+    // Passport confi
+    configurePassport(passport);
 
     this.express.use(cookieParser());
 

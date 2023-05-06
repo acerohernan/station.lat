@@ -6,8 +6,11 @@ config();
 
 // Create the env schema
 const envSchema = z.object({
+  APP_URL: z.string(),
   PORT: z.string().transform((port) => Number(port)),
   NODE_ENV: z.string(),
+  GOOGLE_CLIENT_ID: z.string(),
+  GOOGLE_CLIENT_SECRET: z.string(),
 });
 
 const result = envSchema.safeParse(process.env);
