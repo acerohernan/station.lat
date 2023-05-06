@@ -4,17 +4,23 @@
   "main": "dist/index.js",
   "license": "MIT",
   "dependencies": {
-    "@station.lat/core": "*",
     "@station.lat/config": "*",
+    "@station.lat/core": "*",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "helmet": "^6.1.5",
     "ts-node-dev": "^2.0.0"
   },
   "devDependencies": {
+    "@types/cookie-parser": "^1.4.3",
+    "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
     "@types/node": "^20.1.0"
   },
   "scripts": {
-    "dev": "ts-node-dev --transpile-only --respawn src/index.ts",
+    "dev": "ts-node-dev --transpile-only --respawn src/start.ts",
     "build": "yarn build:clean && tsc",
     "build:clean": "rm -rf dist",
     "lint": "eslint src --fix",
