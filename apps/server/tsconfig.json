@@ -1,10 +1,21 @@
 {
-  "extends": "@station.lat/config/src/tsconfig/server.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "rootDir": ".",
-    "outDir": "dist"
-  },
-  "include": ["src/"],
-  "exclude": ["node_modules", ".turbo", "coverage", "dist", "src/**/*.test.ts"]
+    "module": "commonjs",
+    "declaration": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "strictBindCallApply": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true
+  }
 }

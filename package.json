@@ -16,7 +16,7 @@
   },
   "scripts": {
     "server": "yarn workspace @station.lat/server",
-    "core": "yarn workspace @station.lat/core",
-    "config": "yarn workspace @station.lat/config"
+    "config": "yarn workspace @station.lat/config",
+    "web": "yarn workspace @station.lat/web"
   }
 }

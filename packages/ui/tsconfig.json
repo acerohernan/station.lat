@@ -1,0 +1,5 @@
+{
+  "extends": "@station.lat/config/src/tsconfig/nextjs.json",
+  "include": ["."],
+  "exclude": ["dist", "build", "node_modules"]
+}
