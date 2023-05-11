@@ -1,10 +1,11 @@
-import { Controller, Get, Post, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 import { OwnerService } from './owner.service';
 import { ApiTags } from '@nestjs/swagger';
 import { GoogleOAuthGuard } from './guards/google.guard';
-import { Request } from 'express';
 import { randomUUID } from 'crypto';
 import { ReqUser } from 'src/shared/decorators/req-user.decorator';
+import { JwtGuard } from './guards/jwt.guard';
+import { IJwtOwner, JwtOwner } from './decorators/jwt-owner.decorator';
 
 @ApiTags('owner')
 @Controller('owner')
@@ -31,5 +32,11 @@ export class OwnerController {
     });
 
     return { data: { access_token } };
+  }
+
+  @Get('/iam')
+  @UseGuards(JwtGuard)
+  iam(@JwtOwner() owner: IJwtOwner) {
+    return owner;
   }
 }
