@@ -28,7 +28,23 @@ export class OwnerService {
     return { access_token };
   }
 
-  async createOwner(dto: OwnerDTO) {
+  async welcomeFlow(): Promise<void> {
+    // Validate the input
+
+    // Verify if is the owner has already completed the welcome flow
+
+    // Update the owner information
+
+    // Get the time-zone information
+
+    // Create the company
+
+    // Create the owner's employee account
+
+    return;
+  }
+
+  private async createOwner(dto: OwnerDTO) {
     const { id, email, first_name, image, last_name, phone } = dto;
 
     const newOwner: Owner = {
@@ -43,7 +59,7 @@ export class OwnerService {
     await this.ownerRepository.create(newOwner);
   }
 
-  createAccessToken({ email, owner_id }: { owner_id: string; email: string }): string {
+  private createAccessToken({ email, owner_id }: { owner_id: string; email: string }): string {
     const expiresIn = 1000 * 60 * 60 * 24; // 24 hours
     const signer = createSigner({ key: process.env.JWT_SECRET, expiresIn, sub: owner_id });
     return signer({ email });

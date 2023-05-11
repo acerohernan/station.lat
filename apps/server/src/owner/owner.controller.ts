@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get, UseGuards, Post } from '@nestjs/common';
 import { OwnerService } from './owner.service';
 import { ApiTags } from '@nestjs/swagger';
 import { GoogleOAuthGuard } from './guards/google.guard';
@@ -34,9 +34,9 @@ export class OwnerController {
     return { data: { access_token } };
   }
 
-  @Get('/iam')
+  @Post('/welcome')
   @UseGuards(JwtGuard)
   iam(@JwtOwner() owner: IJwtOwner) {
-    return owner;
+    return this.ownerService.welcomeFlow();
   }
 }
