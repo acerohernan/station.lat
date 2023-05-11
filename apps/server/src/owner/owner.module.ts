@@ -3,10 +3,12 @@ import { OwnerService } from './owner.service';
 import { OwnerController } from './owner.controller';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { OwnerRepository } from './repositories/owner.repository';
-import { PrismaService } from 'src/shared/services/prisma.service';
+import { CompanyModule } from 'src/company/company.module';
+import { SharedModule } from 'src/shared/shared.module';
 
 @Module({
   controllers: [OwnerController],
-  providers: [OwnerService, GoogleStrategy, OwnerRepository, PrismaService],
+  providers: [OwnerService, GoogleStrategy, OwnerRepository],
+  imports: [SharedModule, CompanyModule],
 })
 export class OwnerModule {}

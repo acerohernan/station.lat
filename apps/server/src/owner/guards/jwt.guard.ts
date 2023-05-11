@@ -10,7 +10,7 @@ export class JwtGuard implements CanActivate {
 
     if (!access_token) return false;
 
-    const verify = createVerifier({ key: process.env.JWT_SECRET });
+    const verify = createVerifier({ key: process.env.JWT_OWNER_SECRET });
 
     try {
       const payload = verify(access_token);

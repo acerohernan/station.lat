@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/shared/services/prisma.service';
-import { Owner } from '../entities/Owner';
+import { Owner } from '../entities/owner.entity';
 
 @Injectable()
 export class OwnerRepository {
@@ -14,7 +14,11 @@ export class OwnerRepository {
     return this.prismaService.owner.findUnique({ where: { email } });
   }
 
-  works() {
-    return 'repository works';
+  async getById(id: string): Promise<Owner | null> {
+    return this.prismaService.owner.findUnique({ where: { id } });
+  }
+
+  async update(owner_id: string, owner: Partial<Owner>): Promise<void> {
+    await this.prismaService.owner.update({ where: { id: owner_id }, data: owner });
   }
 }

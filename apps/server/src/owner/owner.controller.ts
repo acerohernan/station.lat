@@ -1,11 +1,12 @@
-import { Controller, Get, UseGuards, Post } from '@nestjs/common';
+import { Controller, Get, UseGuards, Post, Req } from '@nestjs/common';
 import { OwnerService } from './owner.service';
 import { ApiTags } from '@nestjs/swagger';
-import { GoogleOAuthGuard } from './guards/google.guard';
 import { randomUUID } from 'crypto';
 import { ReqUser } from 'src/shared/decorators/req-user.decorator';
 import { JwtGuard } from './guards/jwt.guard';
 import { IJwtOwner, JwtOwner } from './decorators/jwt-owner.decorator';
+import { Request } from 'express';
+import { GoogleOAuthGuard } from 'src/shared/guards/google.guard';
 
 @ApiTags('owner')
 @Controller('owner')
@@ -36,7 +37,10 @@ export class OwnerController {
 
   @Post('/welcome')
   @UseGuards(JwtGuard)
-  iam(@JwtOwner() owner: IJwtOwner) {
-    return this.ownerService.welcomeFlow();
+  iam(@JwtOwner() owner: IJwtOwner, @Req() req: Request) {
+    return this.ownerService.welcomeFlow({
+      owner_id: owner.id,
+      ...req.body,
+    });
   }
 }
