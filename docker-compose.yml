@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  server_db:
+    image: postgres
+    container_name: server_db
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=latinstation_db
+    volumes:
+      - server_db_vol:/var/lib/postgresql/data
+
+volumes:
+  server_db_vol:
