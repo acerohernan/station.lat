@@ -10,14 +10,18 @@ import { CreateCompanyMemberDTO } from './dtos/create-company-member.dto';
 import { TimeZoneRepository } from './repositories/time-zone.repository';
 import { CreateMemberAccessTokenDTO } from './dtos/create-member-acess-token.dto';
 import { createSigner } from 'fast-jwt';
-import { GetCompanyMembersDTO } from './dtos/get-company-members.dto';
+import { AdminCreateCompanyMemberDTO } from './dtos/admin-create-company-member.dto';
+import { UserRepository } from 'src/user/repositories/user.repository';
+import { randomUUID } from 'crypto';
+import { AdminChangeMemberRoleDTO } from './dtos/admin-change-member-role.dto';
 
 @Injectable()
 export class CompanyService {
   constructor(
     private companyRepository: CompanyRepository,
     private memberRepository: MemberRepository,
-    private timeZoneRepository: TimeZoneRepository
+    private timeZoneRepository: TimeZoneRepository,
+    private userRepository: UserRepository
   ) {}
 
   async getMembershipsFromUser(user_id: string): Promise<Member[]> {
@@ -101,52 +105,96 @@ export class CompanyService {
     if (!membership) throw new ForbiddenException(`You are not allowed to access this company`);
 
     // Return the token
-    return this.createMemberJwtToken({ user_id, company_id, role: membership.role });
+    return this.createMemberJwtToken({ member_id: membership.id });
   }
 
-  async getCompany(company_id: string): Promise<Company> {
-    const { success } = await Validator.validate(UuidDTO, { uuid: company_id });
+  async getCompany(member_id: string): Promise<Company> {
+    const { success } = await Validator.validate(UuidDTO, { uuid: member_id });
 
-    if (!success) throw new BadRequestException(`The property <company_id> is not a valid uuid`);
+    if (!success) throw new BadRequestException(`The property <member_id> is not a valid uuid`);
 
-    const company = await this.companyRepository.getById(company_id);
+    const membership = await this.memberRepository.getById(member_id);
 
-    if (!company) throw new NotFoundException(`A company with the id <${company_id}> not exits`);
+    if (!member_id) throw new ForbiddenException(`You are not allowed to see this resource`);
+
+    const company = await this.companyRepository.getById(membership.company_id);
+
+    if (!company) throw new NotFoundException(`A company with the id <${membership.company_id}> not exits`);
 
     return company;
   }
 
-  async getCompanyMembers(dto: GetCompanyMembersDTO): Promise<Member[]> {
+  async adminGetCompanyMembers(member_id: string): Promise<Member[]> {
     // Validate the input
-    const { success, errors } = await Validator.validate(GetCompanyMembersDTO, dto);
+    const { success } = await Validator.validate(UuidDTO, { uuid: member_id });
+
+    if (!success) throw new BadRequestException(`The member_id is not a valid uuid`);
+
+    // Validate if the user has a ADMIN role
+    const admin = await this.ensureMemberIsAdmin(member_id);
+
+    // Return the members
+    return this.memberRepository.getByCompanyId(admin.company_id);
+  }
+
+  async adminCreateCompanyMember(dto: AdminCreateCompanyMemberDTO) {
+    // Validate the input
+    const { success, errors } = await Validator.validate(AdminCreateCompanyMemberDTO, dto);
 
     if (!success) throw new BadRequestException(errors);
 
-    // Validate if the user has a ADMIN role
-    const isAdmin = dto.role === MemberRole.ADMIN;
+    // Find the member information
+    const { admin_member_id, member_user_email, member_role } = dto;
+
+    const adminMember = await this.ensureMemberIsAdmin(admin_member_id);
+
+    // Find the user by the email
+    const user = await this.userRepository.getByEmail(member_user_email);
+
+    if (!user) throw new NotFoundException(`The email <${member_user_email}> is not registered`);
+
+    await this.createCompanyMember({
+      company_id: adminMember.company_id,
+      user_id: user.id,
+      role: member_role,
+      id: randomUUID(),
+    });
+
+    return;
+  }
+
+  async adminChangeMemberRole(dto: AdminChangeMemberRoleDTO) {
+    // Validate input
+    const { success, errors } = await Validator.validate(AdminChangeMemberRoleDTO, dto);
+
+    if (!success) throw new BadRequestException(errors);
+
+    // Verify if the member is admin
+    const { admin_member_id, member_id, member_new_role } = dto;
+
+    await this.ensureMemberIsAdmin(admin_member_id);
+
+    // Change the member role
+    await this.memberRepository.updateMember(member_id, { role: member_new_role });
+
+    return;
+  }
+
+  private async ensureMemberIsAdmin(member_id): Promise<Member> {
+    const member = await this.memberRepository.getById(member_id);
+
+    const isAdmin = member.role === MemberRole.ADMIN;
 
     if (!isAdmin) throw new ForbiddenException(`Only company's admins can see the members`);
 
-    // Return the members
-    return this.memberRepository.getByCompanyId(dto.company_id);
+    return member;
   }
 
-  private createMemberJwtToken({
-    company_id,
-    role,
-    user_id,
-  }: {
-    user_id: string;
-    company_id: string;
-    role: Member['role'];
-  }): string {
-    const payload = {
-      company_id,
-      role,
-    };
+  private createMemberJwtToken({ member_id }: { member_id: string }): string {
+    const payload = {};
 
     const expiresIn = 100 * 60 * 60 * 24; // 24 hours
-    const signer = createSigner({ key: process.env.JWT_COMPANY_SECRET, expiresIn, sub: user_id });
+    const signer = createSigner({ key: process.env.JWT_COMPANY_SECRET, expiresIn, sub: member_id });
 
     return signer(payload);
   }
