@@ -8,6 +8,11 @@ import { WelcomeFlowDTO } from './dtos/welcome-flow.dto';
 import { pick } from 'lodash';
 import { CompanyService } from 'src/company/company.service';
 import { UuidDTO } from 'src/shared/dtos/uuid.dto';
+import { CreateCompanyDTO } from '../company/dtos/create-company.dto';
+import { randomUUID } from 'crypto';
+import { Member, MemberRole } from 'src/company/entities/member.entity';
+import { Company } from 'src/company/entities/company.entity';
+import { CreateMemberAccessTokenDTO } from 'src/company/dtos/create-member-acess-token.dto';
 
 @Injectable()
 export class UserService {
@@ -48,14 +53,41 @@ export class UserService {
     await this.updateUser(user.id, { first_name, last_name, image_url, phone, welcome_flow_completed: true });
   }
 
-  async getMemberships(user_id: string) {
-    // Validate the input
-    const { success } = await Validator.validate(UuidDTO, { uuid: user_id });
-
-    if (!success) throw new BadRequestException(`The user_id <${user_id}> is not a valid uuid`);
-
-    // Get the memberships
+  async getMemberships(user_id: string): Promise<Member[]> {
+    // Get the memberships (validation is made by the company service)
     return this.companyService.getMembershipsFromUser(user_id);
+  }
+
+  async getCompanies(user_id): Promise<Company[]> {
+    // Get the companies (validation is made by the company service)
+    return this.companyService.getCompaniesFromUser(user_id);
+  }
+
+  async createCompany(dto: CreateCompanyDTO): Promise<void> {
+    //  Validate input
+    const { success, errors } = await Validator.validate(CreateCompanyDTO, dto);
+
+    if (!success) throw new BadRequestException(errors);
+
+    // Create the company
+    const company = await this.companyService.createCompany(dto);
+
+    // Create the user membership
+    await this.companyService.createCompanyMember({
+      id: randomUUID(),
+      company_id: company.id,
+      role: MemberRole.ADMIN,
+      user_id: company.user_id,
+    });
+
+    return;
+  }
+
+  async createMemberAccessToken(dto: CreateMemberAccessTokenDTO): Promise<{ access_token: string }> {
+    // Validation is made by the company service
+    const access_token = await this.companyService.createMemberAccessToken(dto);
+
+    return { access_token };
   }
 
   private async createUser(dto: CreateUserDTO): Promise<User> {

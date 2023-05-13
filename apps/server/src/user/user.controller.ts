@@ -49,4 +49,24 @@ export class UserController {
   getMemberships(@JwtUser() user: IJwtUser) {
     return this.userService.getMemberships(user.id);
   }
+
+  @Get('/company')
+  @UseGuards(UserJwtGuard)
+  getCompanies(@JwtUser() user: IJwtUser) {
+    return this.userService.getCompanies(user.id);
+  }
+
+  @Post('/company/create')
+  @UseGuards(UserJwtGuard)
+  createCompany(@JwtUser() user: IJwtUser, @Req() req: Request) {
+    const company_id = randomUUID();
+
+    return this.userService.createCompany({ user_id: user.id, id: company_id, ...req.body });
+  }
+
+  @Post('/company/member/token/create')
+  @UseGuards(UserJwtGuard)
+  createMemberAccessToken(@JwtUser() user: IJwtUser, @Req() req: Request) {
+    return this.userService.createMemberAccessToken({ user_id: user.id, company_id: req.body.company_id });
+  }
 }
