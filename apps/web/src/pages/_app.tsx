@@ -1,6 +1,26 @@
-import '@/styles/globals.css';
+import { createEmotionCache } from '@/utils/emotion';
 import type { AppProps } from 'next/app';
+import { EmotionCache, CacheProvider } from '@emotion/react';
+import Head from 'next/head';
+import { ThemeProvider } from '@/theme/provider';
 
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+const clientSideEmotionCache = createEmotionCache();
+
+export interface MyAppProps extends AppProps {
+  emotionCache?: EmotionCache;
+}
+
+export default function App(props: MyAppProps) {
+  const { Component, pageProps, emotionCache = clientSideEmotionCache } = props;
+
+  return (
+    <CacheProvider value={emotionCache}>
+      <Head>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+      </Head>
+      <ThemeProvider>
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </CacheProvider>
+  );
 }
