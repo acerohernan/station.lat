@@ -11,7 +11,7 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=latinstation_db
     volumes:
-      - server_db_vol:/var/lib/postgresql/data
+      - server_db_data:/var/lib/postgresql/data
 
 volumes:
-  server_db_vol:
+  server_db_data:

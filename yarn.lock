@@ -3101,6 +3101,15 @@ fast-jwt@^2.2.2:
     ecdsa-sig-formatter "^1.0.11"
     mnemonist "^0.39.5"
 
+fast-jwt@^2.2.3:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/fast-jwt/-/fast-jwt-2.2.3.tgz#c9bc42387f04368d2d36971eb9db03e5766a706f"
+  integrity sha512-ziANDWUZpgUyE+A8YAkauVnGa/XXJGEXC1H3qXAYnT8v4Et3EsC8Zuvw8ljiqDgRearw9Wy+Q/Miw5x1XmPJTA==
+  dependencies:
+    asn1.js "^5.4.1"
+    ecdsa-sig-formatter "^1.0.11"
+    mnemonist "^0.39.5"
+
 fast-levenshtein@^2.0.6:
   version "2.0.6"
   resolved "https://registry.npmjs.org/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz"
