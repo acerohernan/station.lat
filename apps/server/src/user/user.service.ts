@@ -6,10 +6,12 @@ import { User } from './entities/user.entity';
 import { createSigner } from 'fast-jwt';
 import { WelcomeFlowDTO } from './dtos/welcome-flow.dto';
 import { pick } from 'lodash';
+import { CompanyService } from 'src/company/company.service';
+import { UuidDTO } from 'src/shared/dtos/uuid.dto';
 
 @Injectable()
 export class UserService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: UserRepository, private companyService: CompanyService) {}
 
   async signInWithGoogle(dto: CreateUserDTO): Promise<{ access_token: string }> {
     // Validate the input
@@ -44,6 +46,16 @@ export class UserService {
     const { first_name, last_name, image_url, phone } = dto;
 
     await this.updateUser(user.id, { first_name, last_name, image_url, phone, welcome_flow_completed: true });
+  }
+
+  async getMemberships(user_id: string) {
+    // Validate the input
+    const { success } = await Validator.validate(UuidDTO, { uuid: user_id });
+
+    if (!success) throw new BadRequestException(`The user_id <${user_id}> is not a valid uuid`);
+
+    // Get the memberships
+    return this.companyService.getMembershipsFromUser(user_id);
   }
 
   private async createUser(dto: CreateUserDTO): Promise<User> {

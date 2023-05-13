@@ -43,4 +43,10 @@ export class UserController {
 
     return this.userService.welcomeFlow(dto);
   }
+
+  @Get('/membership')
+  @UseGuards(UserJwtGuard)
+  getMemberships(@JwtUser() user: IJwtUser) {
+    return this.userService.getMemberships(user.id);
+  }
 }

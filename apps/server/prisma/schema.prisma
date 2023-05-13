@@ -15,4 +15,53 @@ model User {
   last_name String?
   phone String?
   welcome_flow_completed Boolean
+
+  companies Company[]
+  memberships Member[]
+}
+
+model TimeZone {
+  id String @id @default(uuid())
+  name String
+  utc_difference Int
+
+  companies Company[]
+}
+
+model Company {
+  id String @id @default(uuid())
+  
+  user_id String 
+  time_zone_id String
+  
+  domain String @unique
+  image_url String?
+  name String
+  is_pro Boolean
+  last_month_payment_failed Boolean
+  free_trial_finished Boolean
+
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  time_zone TimeZone @relation(fields: [time_zone_id], references: [id])
+
+  members Member[]
+}
+
+enum MemberRole {
+  ADMIN
+  EDITOR
+  READER
+}
+
+model Member {
+  id String @id @default(uuid())
+  
+  user_id String 
+  company_id String
+
+  role MemberRole
+
+  user User @relation(fields: [user_id], references: [id])
+  company Company @relation(fields: [company_id], references: [id])  
 }
