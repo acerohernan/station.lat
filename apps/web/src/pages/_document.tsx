@@ -3,6 +3,7 @@ import createEmotionServer from '@emotion/server/create-instance';
 import { AppType } from 'next/app';
 import Document, { Html, Head, Main, NextScript, DocumentProps, DocumentContext } from 'next/document';
 import { MyAppProps } from './_app';
+import { montserrat } from '../theme/font';
 
 interface MyDocumentProps extends DocumentProps {
   emotionStyleTags: JSX.Element[];
@@ -10,7 +11,7 @@ interface MyDocumentProps extends DocumentProps {
 
 export default function MyDocument({ emotionStyleTags }: MyDocumentProps) {
   return (
-    <Html lang="en">
+    <Html lang="en" className={montserrat.className}>
       <Head>
         {/* PWA primary color */}
         <meta name="theme-color" />

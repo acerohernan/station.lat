@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards, Req, Post } from '@nestjs/common';
+import { Controller, Get, UseGuards, Req, Post, Res } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserGoogleGuard } from './guard/google.guard';
 import { ApiTags } from '@nestjs/swagger';
@@ -8,7 +8,7 @@ import { ReqUser } from './decorators/req-user.decorator';
 import { UserJwtGuard } from './guard/jwt.guard';
 import { IJwtUser, JwtUser } from './decorators/jwt-user.decorator';
 import { WelcomeFlowDTO } from './dtos/welcome-flow.dto';
-import { Request } from 'express';
+import { Request, Response } from 'express';
 
 @ApiTags('user')
 @Controller('user')
@@ -23,7 +23,7 @@ export class UserController {
 
   @Get('/auth/google/callback')
   @UseGuards(UserGoogleGuard)
-  async signInWithGoogleCallback(@ReqUser() user: any) {
+  async signInWithGoogleCallback(@ReqUser() user: any, @Res() res: Response) {
     const user_id = randomUUID();
     const dto: CreateUserDTO = {
       id: user_id,
@@ -33,7 +33,15 @@ export class UserController {
       image_url: user.picture,
     };
     const { access_token } = await this.userService.signInWithGoogle(dto);
-    return { data: { access_token } };
+
+    res.cookie('access_token', access_token, {
+      httpOnly: false,
+      maxAge: 1000 * 60 * 60 * 24,
+      secure: true,
+      domain: String(process.env.FRONTEND_URL),
+    });
+
+    return res.redirect(`${process.env.FRONTEND_URL}`);
   }
 
   @Post('/welcome')

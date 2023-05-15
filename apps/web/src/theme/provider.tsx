@@ -1,6 +1,7 @@
 import React from 'react';
 import { ThemeContext } from './context';
 import { createTheme, ThemeProvider as MuiThemeProvider, CssBaseline } from '@mui/material';
+import { baseTheme } from './base';
 
 export const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [mode, setMode] = React.useState<'light' | 'dark'>('light');
@@ -15,7 +16,14 @@ export const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) =
     [mode]
   );
 
-  const theme = React.useMemo(() => createTheme({ palette: { mode } }), [mode]);
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        ...baseTheme,
+        palette: { mode },
+      }),
+    [mode]
+  );
 
   return (
     <ThemeContext.Provider value={value}>

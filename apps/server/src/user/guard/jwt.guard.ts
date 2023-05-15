@@ -6,9 +6,11 @@ import { createVerifier } from 'fast-jwt';
 export class UserJwtGuard implements CanActivate {
   canActivate(ctx: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const req = ctx.switchToHttp().getRequest();
-    const access_token = req.cookies['access_token'];
+    const bearer_token: string = req.headers['authorization'];
 
-    if (!access_token) return false;
+    if (!bearer_token) return false;
+
+    const access_token = bearer_token.split(' ')[1];
 
     const verify = createVerifier({ key: process.env.JWT_USER_SECRET });
 
