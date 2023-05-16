@@ -5,6 +5,7 @@ export const lightTheme: ThemeOptions = {
     mode: 'light',
     background: {
       default: '#F3F4F9',
+      paper: '#FFFFFF',
     },
   },
 };

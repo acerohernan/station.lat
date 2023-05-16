@@ -18,11 +18,15 @@ export const baseTheme: ThemeOptions = {
       xl: 1536,
     },
   },
+  shape: { borderRadius: 8 },
   components: {
     MuiButton: {
       defaultProps: {
         disableElevation: true,
       },
+    },
+    MuiCard: {
+      defaultProps: { elevation: 0 },
     },
   },
 };

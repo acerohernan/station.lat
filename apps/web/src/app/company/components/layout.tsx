@@ -15,7 +15,7 @@ const CompanyLayout: React.FC<PropsWithChildren> = ({ children }) => {
   }, []);
 
   return (
-    <Box padding="16px 32px">
+    <Box maxWidth="1200px" margin="0 auto" padding="0 32px">
       <CompanyHeader />
       <Box>{children}</Box>
     </Box>
