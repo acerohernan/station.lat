@@ -2,12 +2,13 @@ import React from 'react';
 import { Box, IconButton } from '@mui/material';
 import { WbSunny as SunIcon, Menu as MenuIcon, Person as PersonIcon, Search as SearchIcon } from '@mui/icons-material';
 import { useThemeContext } from '@/theme/hooks';
+import UserMenu from './user-menu';
 
 const CompanyHeader = () => {
   const { toggleMode } = useThemeContext();
 
   return (
-    <Box border="1px solid red">
+    <Box>
       <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
         <Box>
           <IconButton aria-label="menu icon" size="large">
@@ -21,9 +22,7 @@ const CompanyHeader = () => {
           <IconButton aria-label="sun icon" size="large" color="warning">
             <SunIcon onClick={toggleMode} />
           </IconButton>
-          <IconButton aria-label="menu icon" size="large">
-            <PersonIcon />
-          </IconButton>
+          <UserMenu />
         </Box>
       </Box>
     </Box>
