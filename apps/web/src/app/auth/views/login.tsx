@@ -1,4 +1,4 @@
-import { BASE_URL } from '@/api';
+import { BASE_URL } from '@/api/config';
 import Link from '@/components/ui/Link';
 import { Box, Card, Typography, Button, Divider, TextField } from '@mui/material';
 import React from 'react';

@@ -1,13 +1,22 @@
 import React from 'react';
-import { Container, Typography, Box } from '@mui/material';
+import { Container, Typography, Box, Button } from '@mui/material';
 import UserLayout from '../components/layout';
 import { useUserMemberships } from '../hooks/useUserMembership';
 import Memberships from '../components/memberships';
 import { useUserInformation } from '../hooks/useUserInformation';
+import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 export default function UserHomeView() {
   const { data: memberships } = useUserMemberships();
   const { data: user } = useUserInformation();
+
+  const { push } = useRouter();
+
+  function logout() {
+    Cookies.remove('access_token');
+    push('/login');
+  }
 
   return (
     <UserLayout>
@@ -28,6 +37,7 @@ export default function UserHomeView() {
           )}
           {memberships && <Memberships membershipsArr={memberships} />}
         </Box>
+        <Button onClick={logout}>Logout</Button>
       </Container>
     </UserLayout>
   );

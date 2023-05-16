@@ -6,7 +6,7 @@ export class UserGoogleStrategy extends PassportStrategy(Strategy, 'google-user'
     super({
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: 'http://localhost:3000/user/auth/google/callback',
+      callbackURL: `${process.env.URL}/user/auth/google/callback`,
       scope: ['email', 'profile'],
     });
   }
