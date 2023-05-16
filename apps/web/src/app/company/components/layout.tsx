@@ -1,6 +1,8 @@
 import Cookies from 'js-cookie';
+import { Box } from '@mui/material';
 import { useRouter } from 'next/router';
 import React, { PropsWithChildren, useEffect } from 'react';
+import CompanyHeader from './header';
 
 const CompanyLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const { push } = useRouter();
@@ -12,7 +14,12 @@ const CompanyLayout: React.FC<PropsWithChildren> = ({ children }) => {
     if (!company_token) push('/');
   }, []);
 
-  return <>{children}</>;
+  return (
+    <Box padding="16px 32px">
+      <CompanyHeader />
+      <Box>{children}</Box>
+    </Box>
+  );
 };
 
 export default CompanyLayout;
