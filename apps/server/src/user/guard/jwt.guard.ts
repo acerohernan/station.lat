@@ -12,6 +12,8 @@ export class UserJwtGuard implements CanActivate {
 
     const access_token = bearer_token.split(' ')[1];
 
+    if (!access_token) return false;
+
     const verify = createVerifier({ key: process.env.JWT_USER_SECRET });
 
     try {

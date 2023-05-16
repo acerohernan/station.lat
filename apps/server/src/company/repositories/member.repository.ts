@@ -7,7 +7,7 @@ export class MemberRepository {
   constructor(private prismaService: PrismaService) {}
 
   async getByUserId(user_id: string): Promise<Array<Member>> {
-    return this.prismaService.member.findMany({ where: { user_id } });
+    return this.prismaService.member.findMany({ where: { user_id }, include: { company: true } });
   }
 
   async getById(member_id: string): Promise<Member | null> {

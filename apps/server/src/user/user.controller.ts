@@ -38,13 +38,18 @@ export class UserController {
       httpOnly: false,
       maxAge: 1000 * 60 * 60 * 24,
       secure: true,
-      domain: String(process.env.FRONTEND_URL),
     });
 
     return res.redirect(`${process.env.FRONTEND_URL}`);
   }
 
-  @Post('/welcome')
+  @Get('information')
+  @UseGuards(UserJwtGuard)
+  getUser(@JwtUser() user: IJwtUser) {
+    return this.userService.getUser(user.id);
+  }
+
+  @Post('welcome')
   @UseGuards(UserJwtGuard)
   welcomeFlow(@JwtUser() user: IJwtUser, @Req() req: Request) {
     const dto: WelcomeFlowDTO = { id: user.id, ...req.body };

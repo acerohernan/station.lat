@@ -34,6 +34,15 @@ export class UserService {
     return { access_token };
   }
 
+  async getUser(user_id): Promise<User> {
+    // Validate the data
+    const { success } = await Validator.validate(UuidDTO, { uuid: user_id });
+
+    if (!success) throw new BadRequestException(`The user_id is not a valid uuid`);
+
+    return this.userRepository.getById(user_id);
+  }
+
   async welcomeFlow(dto: WelcomeFlowDTO): Promise<void> {
     // Validate the input
     const { success, errors } = await Validator.validate(WelcomeFlowDTO, dto);
