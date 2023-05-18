@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, IconButton } from '@mui/material';
 import {
   WbSunny as SunIcon,
@@ -9,9 +9,20 @@ import {
 import { useThemeContext } from '@/theme/hooks';
 import UserMenu from './user-menu';
 import UserDrawerButton from './drawer';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
+import CompanyModal from '../modal';
 
 const CompanyHeader = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+
   const { toggleMode } = useThemeContext();
+  const { push } = useRouter();
+
+  const logout = () => {
+    Cookies.remove('company_token');
+    push('/');
+  };
 
   return (
     <Box padding="16px 0">
@@ -29,7 +40,14 @@ const CompanyHeader = () => {
           <IconButton aria-label="sun icon" color="warning" onClick={toggleMode}>
             <SunIcon />
           </IconButton>
-          <UserMenu />
+          <UserMenu logoutFn={() => setModalOpen(true)} />
+          <CompanyModal
+            title="Confirm Log Out"
+            setOpen={setModalOpen}
+            open={modalOpen}
+            description="Are you sure you want to log out?"
+            onSuccess={logout}
+          />
         </Box>
       </Box>
     </Box>

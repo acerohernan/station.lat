@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Typography, Box, Button } from '@mui/material';
+import { Container, Typography, Box, Button, Skeleton } from '@mui/material';
 import UserLayout from '../components/layout';
 import { useUserMemberships } from '../hooks/useUserMembership';
 import Memberships from '../components/memberships';

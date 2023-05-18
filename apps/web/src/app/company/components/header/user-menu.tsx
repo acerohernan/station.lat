@@ -1,11 +1,13 @@
 import React from 'react';
-import { Tooltip, IconButton, Avatar, Menu, MenuItem, Typography, Divider } from '@mui/material';
+import { Tooltip, IconButton, Avatar, Menu, MenuItem, Typography, Divider, Box } from '@mui/material';
+import { useUserInformation } from '@/app/user/hooks/useUserInformation';
+const menuItems = ['Profile & Account', 'Settings'];
 
-const menuItems = ['Set status', 'Profile & Account', 'Settings', 'Manage Team'];
-
-const UserMenu = () => {
+const UserMenu = ({ logoutFn }: { logoutFn: () => void }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  const { data: user } = useUserInformation();
 
   function handleClick(event: React.MouseEvent<HTMLElement>) {
     setAnchorEl(event.currentTarget);
@@ -25,7 +27,7 @@ const UserMenu = () => {
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
         >
-          <Avatar sx={{ width: 30, height: 30 }}>M</Avatar>
+          <Avatar sx={{ width: 30, height: 30 }}>{user && user.first_name ? user.first_name.slice(0, 1) : 'A'}</Avatar>
         </IconButton>
       </Tooltip>
       <Menu
@@ -63,11 +65,23 @@ const UserMenu = () => {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
+        {user ? (
+          <React.Fragment>
+            <Box padding={'8px 20px 12px'}>
+              <Typography fontWeight={'700'}>{user.first_name}</Typography>
+              <Typography fontSize={'0.8rem'} color="">
+                {user.email}
+              </Typography>
+            </Box>
+            <Divider />
+          </React.Fragment>
+        ) : null}
+
         {menuItems.map((item) => (
-          <UserMenuItem key={item} handleClose={handleClose} label={item} />
+          <UserMenuItem key={item} onClick={handleClose} label={item} />
         ))}
         <Divider />
-        <UserMenuItem label="SignOut" handleClose={handleClose} />
+        <UserMenuItem label="LogOut" onClick={logoutFn} />
       </Menu>
     </>
   );
@@ -75,12 +89,12 @@ const UserMenu = () => {
 
 interface ItemProps {
   label: string;
-  handleClose: () => void;
+  onClick: () => void;
 }
 
-const UserMenuItem: React.FC<ItemProps> = ({ label, handleClose }) => {
+const UserMenuItem: React.FC<ItemProps> = ({ label, onClick }) => {
   return (
-    <MenuItem onClick={handleClose}>
+    <MenuItem onClick={onClick}>
       <Typography fontSize={'13px'} marginLeft={'4px'}>
         {label}
       </Typography>

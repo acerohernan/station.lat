@@ -15,6 +15,7 @@ import {
   Person as PersonIcon,
   DocumentScanner as DocumentScannerIcon,
   Analytics as AnalyticsIcon,
+  Group as GroupIcon,
 } from '@mui/icons-material';
 import React from 'react';
 import { useRouter } from 'next/router';
@@ -35,6 +36,11 @@ const navBarItems: NavBarItem[] = [
     icon: <PersonIcon />,
     label: 'Clients',
     path: '/company/clients',
+  },
+  {
+    icon: <GroupIcon />,
+    label: 'Employees',
+    path: '/company/employees',
   },
   {
     icon: <DocumentScannerIcon />,
