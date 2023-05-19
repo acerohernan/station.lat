@@ -10,11 +10,12 @@ const AuthLayout: React.FC<Props> = ({ children }) => {
   const navigate = useNavigate();
 
   React.useEffect(() => {
+    const isLoggedInComapany = Boolean(Number(Cookies.get('isLoggedInCompany')));
     const isLoggedIn = Boolean(Number(Cookies.get('isLoggedIn')));
 
-    if (isLoggedIn) {
-      navigate('/');
-    }
+    if (isLoggedInComapany) return navigate('/company');
+
+    if (isLoggedIn) navigate('/');
   }, []);
 
   return <React.Fragment>{children}</React.Fragment>;

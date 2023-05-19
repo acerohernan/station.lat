@@ -85,7 +85,18 @@ export class UserController {
 
   @Post('/company/member/token/create')
   @UseGuards(UserJwtGuard)
-  createMemberAccessToken(@JwtUser() user: IJwtUser, @Req() req: Request) {
-    return this.userService.createMemberAccessToken({ user_id: user.id, company_id: req.body.company_id });
+  async createMemberAccessToken(@JwtUser() user: IJwtUser, @Req() req: Request, @Res() res: Response) {
+    const { access_token } = await this.userService.createMemberAccessToken({
+      user_id: user.id,
+      company_id: req.body.company_id,
+    });
+
+    res.cookie('company_token', access_token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24,
+      secure: true,
+    });
+
+    return res.sendStatus(200);
   }
 }

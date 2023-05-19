@@ -9,10 +9,11 @@ const UserLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
 
   React.useEffect(() => {
     const isLoggedIn = Boolean(Number(Cookies.get('isLoggedIn')));
+    const isLoggedInCompany = Boolean(Number(Cookies.get('isLoggedInCompany')));
 
-    if (!isLoggedIn) {
-      navigate('/signin');
-    }
+    if (isLoggedInCompany) return navigate('/company');
+
+    if (!isLoggedIn) navigate('/signin');
   }, []);
   return (
     <Box maxWidth="1200px" margin="0 auto" padding="0 24px">
