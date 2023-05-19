@@ -17,6 +17,7 @@
   "scripts": {
     "server": "yarn workspace @station.lat/server",
     "config": "yarn workspace @station.lat/config",
-    "web": "yarn workspace @station.lat/web"
+    "web": "yarn workspace @station.lat/web",
+    "admin": "yarn workspace @station.lat/admin"
   }
 }

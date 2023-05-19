@@ -35,6 +35,12 @@ export class UserController {
     const { access_token } = await this.userService.signInWithGoogle(dto);
 
     res.cookie('access_token', access_token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24,
+      secure: true,
+    });
+
+    res.cookie('isLoggedIn', 1, {
       httpOnly: false,
       maxAge: 1000 * 60 * 60 * 24,
       secure: true,

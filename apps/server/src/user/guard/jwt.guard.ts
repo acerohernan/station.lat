@@ -1,16 +1,13 @@
 import { CanActivate, Injectable, ExecutionContext } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { createVerifier } from 'fast-jwt';
+import { Request } from 'express';
 
 @Injectable()
 export class UserJwtGuard implements CanActivate {
   canActivate(ctx: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const req = ctx.switchToHttp().getRequest();
-    const bearer_token: string = req.headers['authorization'];
-
-    if (!bearer_token) return false;
-
-    const access_token = bearer_token.split(' ')[1];
+    const access_token: string = req.cookies['access_token'];
 
     if (!access_token) return false;
 
