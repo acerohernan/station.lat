@@ -7,31 +7,15 @@ import {
   ListItemIcon,
   ListItemText,
   ListSubheader,
+  Tooltip,
   Typography,
 } from '@mui/material';
-import { Menu as MenuIcon, Home as HomeIcon, Settings as SettingsIcon } from '@mui/icons-material';
+import { Menu as MenuIcon } from '@mui/icons-material';
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { companyRoutes } from '../../constants/menuItems';
 
-interface NavBarItem {
-  icon: React.ReactNode;
-  label: string;
-  path: string;
-}
-
-const navBarItems: NavBarItem[] = [
-  {
-    icon: <HomeIcon />,
-    label: 'Home',
-    path: '/',
-  },
-  {
-    icon: <SettingsIcon />,
-    label: 'Settings',
-    path: '/settings',
-  },
-];
-
-const UserDrawerButton = () => {
+const CompanyDrawerButton = () => {
   const [open, setOpen] = React.useState(false);
 
   const toggleDrawer = (event: React.MouseEvent | React.KeyboardEvent) => {
@@ -47,9 +31,12 @@ const UserDrawerButton = () => {
 
   return (
     <React.Fragment>
-      <IconButton aria-label="menu icon" onClick={toggleDrawer}>
-        <MenuIcon />
-      </IconButton>
+      <Tooltip title="Open drawer">
+        <IconButton aria-label="menu icon" onClick={toggleDrawer}>
+          <MenuIcon />
+        </IconButton>
+      </Tooltip>
+
       <Drawer anchor="left" open={open} onClose={toggleDrawer}>
         <DrawerMenu toggleDrawer={toggleDrawer} />
       </Drawer>
@@ -62,11 +49,13 @@ interface MenuProps {
 }
 
 const DrawerMenu: React.FC<MenuProps> = ({ toggleDrawer }) => {
+  const navigate = useNavigate();
+
   return (
     <Box sx={{ width: '280px', height: '100%', padding: '16px', bgcolor: 'background.paper' }} role="presentation">
       <Box margin="16px 0">
         <Typography component="h4" fontWeight="700" fontSize="1.1rem" marginLeft="15px">
-          Latin Station
+          Lation Station
         </Typography>
       </Box>
       <List
@@ -85,17 +74,17 @@ const DrawerMenu: React.FC<MenuProps> = ({ toggleDrawer }) => {
           </ListSubheader>
         }
       >
-        {navBarItems.map((item) => {
+        {companyRoutes.map((route) => {
           return (
             <ListItemButton
-              key={item.path}
+              key={route.path}
               onClick={(event) => {
                 toggleDrawer(event);
-                // push(item.path);
+                navigate(route.path);
               }}
             >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.label} />
+              <ListItemIcon>{route.icon}</ListItemIcon>
+              <ListItemText primary={route.label} />
             </ListItemButton>
           );
         })}
@@ -104,4 +93,4 @@ const DrawerMenu: React.FC<MenuProps> = ({ toggleDrawer }) => {
   );
 };
 
-export default UserDrawerButton;
+export default CompanyDrawerButton;

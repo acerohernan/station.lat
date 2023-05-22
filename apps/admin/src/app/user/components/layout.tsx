@@ -16,9 +16,9 @@ const UserLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
     if (!isLoggedIn) navigate('/signin');
   }, []);
   return (
-    <Box maxWidth="1200px" margin="0 auto" padding="0 24px">
+    <Box maxWidth="1200px" margin="0 auto" padding="0 24px 24px">
       <UserHeader />
-      {children}
+      <Box>{children}</Box>
     </Box>
   );
 };

@@ -7,6 +7,7 @@ import UserMenu from './user-menu';
 import UserDrawerButton from './drawer';
 import CompanyModal from '../modal';
 import { useNavigate } from 'react-router-dom';
+import UserNotifications from './notifications';
 
 const UserHeader = () => {
   const [modalOpen, setModalOpen] = React.useState(false);
@@ -29,9 +30,7 @@ const UserHeader = () => {
           </IconButton>
         </Box>
         <Box>
-          <IconButton aria-label="bell icon">
-            <BellIcon />
-          </IconButton>
+          <UserNotifications />
           <IconButton aria-label="sun icon" color="warning" onClick={toggleMode}>
             <SunIcon />
           </IconButton>

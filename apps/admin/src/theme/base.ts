@@ -26,7 +26,7 @@ export const baseTheme: ThemeOptions = {
     },
     MuiCard: {
       defaultProps: { elevation: 0 },
-      styleOverrides: { root: { padding: '16px' } },
+      styleOverrides: { root: { padding: '24px' } },
     },
   },
 };

@@ -6,11 +6,7 @@ import { createVerifier } from 'fast-jwt';
 export class CompanyJwtGuard implements CanActivate {
   canActivate(ctx: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     const req = ctx.switchToHttp().getRequest();
-    const bearer_token: string = req.headers['authorization'];
-
-    if (!bearer_token) return false;
-
-    const access_token = bearer_token.split(' ')[1];
+    const access_token: string = req.cookies['company_token'];
 
     if (!access_token) return false;
 
