@@ -6,12 +6,18 @@ import { lightTheme } from './light';
 import { darkTheme } from './dark';
 
 export const ThemeProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const [mode, setMode] = React.useState<'light' | 'dark'>('light');
+  const [mode, setMode] = React.useState<'light' | 'dark'>(() => {
+    const mode = (localStorage.getItem('theme') as 'light' | 'dark') ?? 'light';
+
+    return mode;
+  });
 
   const value = React.useMemo(
     () => ({
       toggleMode: () => {
-        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+        const newMode = mode === 'light' ? 'dark' : 'light';
+        setMode(newMode);
+        localStorage.setItem('theme', newMode);
       },
       mode,
     }),
