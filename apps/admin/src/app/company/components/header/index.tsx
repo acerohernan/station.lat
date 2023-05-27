@@ -1,7 +1,7 @@
 import React from 'react';
 import Cookies from 'js-cookie';
 import { Box, IconButton, Tooltip } from '@mui/material';
-import { WbSunny as SunIcon, Search as SearchIcon, Notifications as BellIcon } from '@mui/icons-material';
+import { WbSunny as SunIcon, Search as SearchIcon } from '@mui/icons-material';
 import { useThemeContext } from '@/theme/hooks';
 import CompanyMenu from './company-menu';
 import CompanyDrawerButton from './drawer';

@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Typography } from '@mui/material';
 import UserLayout from '../../components/layout';
 import Card from '@mui/material/Card';
 import UserMemberships from './memberships';
