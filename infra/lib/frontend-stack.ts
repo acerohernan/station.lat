@@ -8,6 +8,9 @@ import * as cloudfront_origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import { BucketDeployment, Source } from 'aws-cdk-lib/aws-s3-deployment';
 import { Construct } from 'constructs';
 import path = require('path');
+import { config } from 'dotenv';
+
+config();
 
 const REACT_BUNDLE_PATH = path.resolve(__dirname, '..', '..', 'apps', 'admin', 'dist');
 const HOSTED_ZONE_DOMAIN = String(process.env.HOSTED_ZONE_DOMAIN);

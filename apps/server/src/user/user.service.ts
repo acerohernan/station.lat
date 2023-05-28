@@ -92,11 +92,11 @@ export class UserService {
     return;
   }
 
-  async createMemberAccessToken(dto: CreateMemberAccessTokenDTO): Promise<{ access_token: string }> {
+  async createMemberAccessToken(dto: CreateMemberAccessTokenDTO): Promise<{ company_token: string }> {
     // Validation is made by the company service
     const access_token = await this.companyService.createMemberAccessToken(dto);
 
-    return { access_token };
+    return { company_token: access_token };
   }
 
   private async createUser(dto: CreateUserDTO): Promise<User> {

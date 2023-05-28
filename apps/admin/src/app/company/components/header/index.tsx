@@ -18,7 +18,7 @@ const CompanyHeader = () => {
   const { data: company } = useCompanyInformation();
 
   const logout = () => {
-    Cookies.remove('isLoggedInCompany');
+    Cookies.remove('company_token');
     navigate('/');
   };
 

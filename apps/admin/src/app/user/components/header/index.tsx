@@ -16,7 +16,7 @@ const UserHeader = () => {
   const navigate = useNavigate();
 
   const logout = () => {
-    Cookies.remove('isLoggedIn');
+    Cookies.remove('access_token');
     navigate('/signin');
   };
 

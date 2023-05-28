@@ -58,8 +58,12 @@ const MembershipCard: React.FC<CardProps> = ({ membership, setIsGenerating, navi
       return setIsGenerating(false);
     }
 
-    Cookies.set('isLoggedInCompany', '1');
-    navigate('/company');
+    if (res.data?.company_token) {
+      Cookies.set('company_token', res.data.company_token);
+      navigate('/company');
+    } else {
+      alert('An error has ocurred');
+    }
 
     setIsGenerating(false);
   };

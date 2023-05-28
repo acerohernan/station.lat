@@ -4,31 +4,34 @@ import Cookies from 'js-cookie';
 import { CreateUserMemberTokenParam, User, UserMembership } from './types';
 import { ApiError, ApiMutation } from '../types';
 
-const headers = {
+const authHeaders = () => ({
   'Content-Type': 'application/json',
-};
+  Authorization: `Bearer ${Cookies.get('access_token')}`,
+});
 
 export const getInformation = async (): Promise<User | null> =>
   axios
-    .get(`${BASE_URL}/user/information`, { withCredentials: true })
+    .get(`${BASE_URL}/user/information`, { headers: { ...authHeaders() } })
     .then((res) => res.data ?? null)
     .catch((err: AxiosError) => {
       if (err.response?.status === 403) {
-        Cookies.remove('isLoggedIn');
+        Cookies.remove('access_token');
         window.location.href = '/signin';
       }
 
       return null;
     });
 
-export const createMemberToken = async (params: CreateUserMemberTokenParam): Promise<ApiMutation<null>> =>
+export const createMemberToken = async (
+  params: CreateUserMemberTokenParam
+): Promise<ApiMutation<{ company_token: string }>> =>
   new Promise((resolve) =>
     axios
       .post(`${BASE_URL}/user/company/member/token/create`, params, {
-        withCredentials: true,
+        headers: { ...authHeaders() },
       })
-      .then(() => {
-        resolve({ failed: false, data: null, error: null });
+      .then((res) => {
+        resolve({ failed: false, data: res.data, error: null });
       })
       .catch((err: AxiosError<ApiError>) => {
         let errors: string[] = [];
@@ -44,8 +47,7 @@ export const createMemberToken = async (params: CreateUserMemberTokenParam): Pro
 
 export const getMemberships = async (): Promise<Array<UserMembership> | null> =>
   fetch(`${BASE_URL}/user/membership`, {
-    credentials: 'include',
-    headers,
+    headers: { ...authHeaders() },
   }).then((res) => {
     if (!res.ok) return null;
 

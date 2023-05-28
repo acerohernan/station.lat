@@ -15,7 +15,7 @@ const CompanyHomePage = () => {
             </Typography>
             <Typography textAlign="center" marginTop="16px">
               You have done{' '}
-              <Typography color="blue" fontWeight="500" sx={{ display: 'inline' }}>
+              <Typography component="span" color="blue" fontWeight="500" sx={{ display: 'inline' }}>
                 76%
               </Typography>{' '}
               more sales today. Check your inventory and update your stocks.

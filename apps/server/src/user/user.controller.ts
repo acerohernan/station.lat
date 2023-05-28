@@ -34,19 +34,7 @@ export class UserController {
     };
     const { access_token } = await this.userService.signInWithGoogle(dto);
 
-    res.cookie('access_token', access_token, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24,
-      secure: true,
-    });
-
-    res.cookie('isLoggedIn', 1, {
-      httpOnly: false,
-      maxAge: 1000 * 60 * 60 * 24,
-      secure: true,
-    });
-
-    return res.redirect(`${process.env.FRONTEND_URL}`);
+    return res.redirect(`${process.env.FRONTEND_URL}/signin?access_token=${access_token}`);
   }
 
   @Get('information')
@@ -85,18 +73,10 @@ export class UserController {
 
   @Post('/company/member/token/create')
   @UseGuards(UserJwtGuard)
-  async createMemberAccessToken(@JwtUser() user: IJwtUser, @Req() req: Request, @Res() res: Response) {
-    const { access_token } = await this.userService.createMemberAccessToken({
+  async createMemberAccessToken(@JwtUser() user: IJwtUser, @Req() req: Request) {
+    return this.userService.createMemberAccessToken({
       user_id: user.id,
       company_id: req.body.company_id,
     });
-
-    res.cookie('company_token', access_token, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24,
-      secure: true,
-    });
-
-    return res.sendStatus(200);
   }
 }

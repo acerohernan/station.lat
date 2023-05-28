@@ -28,5 +28,6 @@ export const baseTheme: ThemeOptions = {
       defaultProps: { elevation: 0 },
       styleOverrides: { root: { padding: '24px' } },
     },
+    MuiTypography: {},
   },
 };
